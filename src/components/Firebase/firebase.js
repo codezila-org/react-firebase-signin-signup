@@ -1,4 +1,5 @@
 import app from 'firebase/app'
+import 'firebase/auth'
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -11,8 +12,48 @@ const config = {
 
 class Firebase {
     constructor(){
+        this.state = { 
+          user: null,
+          error: null,
+        }
+
         app.initializeApp(config)
+
+        this.auth = app.auth()
+        this.googleAuth = new app.auth.GoogleAuthProvider()
     }
+
+    // SignIn/SingUp with email & password
+
+    doCreateUserWithEmailAndPassword = (email, password) =>
+      this.auth.createUserWithEmailAndPassword(email, password)
+
+    doSignInWithEmailAndPassword = (email, password) =>
+    this.auth.signInWithEmailAndPassword(email, password)
+
+    doSignOut = () => this.auth.signOut()
+
+    doPasswordReset = email => this.auth.sendPasswordResetEmail(email)
+
+    doPasswordUpdate = password => 
+      this.auth.currentUser.updatePassword(password)
+
+    doCreateUserWithGoogle = () => {
+      app.auth().signInWithRedirect(this.googleAuth)
+      app.auth().getRedirectResult.then(
+        result => {
+          if(result.credential) {
+            var token = result.credential.accessToken
+          }
+
+          var user = result.user
+          this.setState({ user: user})
+        }).catch(error => {
+          var errorMessage = error.message
+          this.setState({ error: errorMessage})
+        })
+    }
+    
 }
 
 export default Firebase
