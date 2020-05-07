@@ -1,9 +1,12 @@
 import React from 'react'
-import {Link} from 'react-router-dom
+import {Link, withRouter} from 'react-router-dom'
+
+import {  withFirebase  } from '../Firebase'
 
 import {UrlStrings} from '../../constants'
+import { compose } from 'recompose'
 
-const SingUpPage = () => (
+const SignUpPage = () => (
     <div>
         <h1>SignUP</h1>
         <SignUpForm />
@@ -20,7 +23,7 @@ const INITIAL_STATE = {
     error: null,
 }
 
-class SignUpForm extends React.Component {
+class SignUpFormBase extends React.Component {
     constructor(props){
         super(props)
 
@@ -28,7 +31,19 @@ class SignUpForm extends React.Component {
     }
 
     onSubmit = event => {
+        const { username, email, passwordOne } = this.state
 
+        this.props.firebase
+            .doCreateUserWithEmailAndPassword(email, passwordOne)
+            .then(authUser => {
+                this.setState({ ...INITIAL_STATE })
+                this.props.history.push(UrlStrings.HOME)
+            })
+            .catch(error => {
+                this.setState({ error })
+            })
+
+            event.preventDefault()
     }
 
     onChange = event => {
@@ -108,6 +123,11 @@ const SignUpLink = () => (
         Don't have an account? <Link to={UrlStrings.SIGN_UP} />
     </p>
 )
+
+const SignUpForm = compose(
+    withRouter,
+    withFirebase,
+    )(SignUpFormBase)
 
 export default SignUpPage
 
