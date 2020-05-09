@@ -14,9 +14,8 @@ import AccountPage from '../Account'
 //import AdminPage from '../Admin'
 
 import {UrlStrings} from '../../constants/routes'
-import { withFirebase } from '../Firebase'
 
-import { AuthUserContext, withAuth } from '../Session'
+import { withAuthentication } from '../Session'
 
 const App = () =>(
         <Router>
@@ -36,4 +35,4 @@ const App = () =>(
         </Router>
 )
 
-export default withAuth(App)
+export default withAuthentication(App)
