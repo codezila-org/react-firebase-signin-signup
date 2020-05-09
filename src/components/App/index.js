@@ -8,9 +8,9 @@ import Navigation from '../Navigation'
 import LandingPage from '../Landing'
 import SignUpPage from '../SignUp'
 import SignInPage from '../SignIn'
-//import PasswordForgetPage from '../PasswordForget'
+import PasswordForgetPage from '../PasswordForget'
 import HomePage from '../Home'
-//import AccountPage from '../Account'
+import AccountPage from '../Account'
 //import AdminPage from '../Admin'
 
 import {UrlStrings} from '../../constants/routes'
@@ -27,9 +27,9 @@ const App = () =>(
                 <Route exact path={UrlStrings.LANDING} component={LandingPage} />
                 <Route path={UrlStrings.SIGN_UP} component={SignUpPage} />
                 <Route path={UrlStrings.SIGN_IN} component={SignInPage} />
-                {/* <Route path={UrlStrings.PASSWORD_FORGET} component={PasswordForgetPage} /> */}
+                <Route path={UrlStrings.PASSWORD_FORGET} component={PasswordForgetPage} />
                 <Route path={UrlStrings.HOME} component={HomePage} />
-                {/* <Route path={UrlStrings.ACCOUNT} component={AccountPage} /> */}
+                <Route path={UrlStrings.ACCOUNT} component={AccountPage} />
                 {/* <Route path={UrlStrings.ADMIN} component={AdminPage} /> */}
 
             </div>

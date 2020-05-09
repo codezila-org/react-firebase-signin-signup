@@ -4,11 +4,13 @@ import { UrlStrings } from '../../constants/routes'
 import { compose } from 'recompose'
 import { withRouter } from 'react-router-dom'
 import { withFirebase } from '../Firebase'
+import { PasswordForgetLink } from '../PasswordForget'
 
 const SignInPage = () => (
     <div>
         <h1>SignIn</h1>
         <SignInForm />
+        <PasswordForgetLink />
         <SignUpLink />
     </div>
 )
