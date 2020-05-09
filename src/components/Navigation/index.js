@@ -1,9 +1,14 @@
 import React from 'react'
 import {  Link  } from 'react-router-dom'
 
-import {HeaderData} from '../../constants/routes'
+import SignOutButton from '../SignOut'
+import {HeaderData, UrlStrings} from '../../constants/routes'
 
-const Navigation = () => (
+const Navigation = ({ authUser }) => (
+    <div>{authUser ? <NavigationAuth /> : <NavigationNonAuth />}</div>
+)
+
+const NavigationAuth = () => (
     <header>
         <h4><strong>{HeaderData.title}</strong></h4>
         <ul>
@@ -12,6 +17,23 @@ const Navigation = () => (
                 <Link to={path}>{label}</Link>
             </li>
         ))}
+            <li>
+                <SignOutButton />
+            </li>
+        </ul>
+    </header>
+)
+
+const NavigationNonAuth = () => (
+    <header>
+        <h4><strong>{HeaderData.title}</strong></h4>
+        <ul> 
+            <li>
+                <Link to={UrlStrings.LANDING}>Landing</Link>
+            </li>
+            <li>
+                <Link to={UrlStrings.SIGN_IN}>Sign In</Link>
+            </li>
         </ul>
     </header>
 )

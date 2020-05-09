@@ -3,7 +3,7 @@ import {Link, withRouter} from 'react-router-dom'
 
 import {  withFirebase  } from '../Firebase'
 
-import {UrlStrings} from '../../constants'
+import {UrlStrings} from '../../constants/routes'
 import { compose } from 'recompose'
 
 const SignUpPage = () => (
@@ -46,6 +46,19 @@ class SignUpFormBase extends React.Component {
             event.preventDefault()
     }
 
+    signupWithGoogle = event => {
+        this.props.firebase
+            .doCreateUserWithGoogle()
+            .then(authUser => {
+                this.props.history.push(UrlStrings.HOME)
+            })
+            .catch(error => {
+                this.setState({ error })
+            })
+
+            event.preventDefault()
+    }
+
     onChange = event => {
         this.setState({ [event.target.name]: event.target.value })
     }
@@ -68,6 +81,7 @@ class SignUpFormBase extends React.Component {
             username === '';
 
         return (
+        <div>
           <form onSubmit={this.onSubmit}>
             <input 
                 name="username"
@@ -113,14 +127,18 @@ class SignUpFormBase extends React.Component {
             />   
             <button disabled={isInvalid} type="submit" >Sign Up</button>
             {error && <p>{error.message}</p>}
-          </form>   
+          </form>  
+          <div>
+              <button onClick={this.signupWithGoogle}>SignUp with Google</button>
+          </div>
+        </div>
         )
     }
 }
 
 const SignUpLink = () => (
     <p>
-        Don't have an account? <Link to={UrlStrings.SIGN_UP} />
+        Don't have an account? <Link to={UrlStrings.SIGN_UP} >Sign Up Now</Link>
     </p>
 )
 
