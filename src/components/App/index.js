@@ -16,32 +16,12 @@ import HomePage from '../Home'
 import {UrlStrings} from '../../constants/routes'
 import { withFirebase } from '../Firebase'
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
- 
-    this.state = {
-      authUser: null,
-    };
-  }
+import { AuthUserContext, withAuth } from '../Session'
 
-  componentDidMount(){
-    this.listener = this.props.firebase.auth.onAuthStateChanged(authUser => {
-      authUser
-      ? this.setState({ authUser })
-      : this.setState({ authUser: null })
-    })
-  }
-
-  componentWillUnmount(){
-    this.listener()
-  }
- 
-  render() {
-    return (
+const App = () =>(
         <Router>
             <div>
-                <Navigation authUser={this.state.authUser} />
+                <Navigation />
                 <hr/>
 
                 <Route exact path={UrlStrings.LANDING} component={LandingPage} />
@@ -54,8 +34,6 @@ class App extends React.Component {
 
             </div>
         </Router>
-    )
-  }
-}
+)
 
-export default withFirebase(App)
+export default withAuth(App)
