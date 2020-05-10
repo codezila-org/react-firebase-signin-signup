@@ -1,5 +1,6 @@
 import app from 'firebase/app'
 import 'firebase/auth'
+import 'firebase/database'
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -20,6 +21,8 @@ class Firebase {
         app.initializeApp(config)
 
         this.auth = app.auth()
+        this.db = app.database()
+
         this.googleAuth = new app.auth.GoogleAuthProvider()
     }
 
@@ -38,22 +41,15 @@ class Firebase {
     doPasswordUpdate = password => 
       this.auth.currentUser.updatePassword(password)
 
-    doCreateUserWithGoogle = () => {
-      app.auth().signInWithRedirect(this.googleAuth)
-      app.auth().getRedirectResult.then(
-        result => {
-          if(result.credential) {
-            var token = result.credential.accessToken
-          }
-
-          var user = result.user
-          this.setState({ user: user})
-        }).catch(error => {
-          var errorMessage = error.message
-          this.setState({ error: errorMessage})
-        })
-    }
+    doCreateUserWithGoogle = () => 
+      this.auth.signInWithPopup(this.googleAuth)
     
+
+    // User API
+
+    user = uid => this.db.ref(`users/${uid}`)
+
+    users = () => this.db.ref('users')
 }
 
 export default Firebase

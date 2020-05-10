@@ -1,6 +1,5 @@
 import React from 'react'
 import {Link, withRouter} from 'react-router-dom'
-
 import {  withFirebase  } from '../Firebase'
 
 import {UrlStrings} from '../../constants/routes'
@@ -31,10 +30,20 @@ class SignUpFormBase extends React.Component {
     }
 
     onSubmit = event => {
-        const { username, email, passwordOne } = this.state
+        const { username, firstName, lastName, email, passwordOne } = this.state
 
         this.props.firebase
             .doCreateUserWithEmailAndPassword(email, passwordOne)
+            .then(authUser => {
+                return this.props.firebase
+                    .user(authUser.user.uid)
+                    .set({
+                        username,
+                        firstName,
+                        lastName,
+                        email,
+                    })
+            })
             .then(authUser => {
                 this.setState({ ...INITIAL_STATE })
                 this.props.history.push(UrlStrings.HOME)
@@ -46,9 +55,26 @@ class SignUpFormBase extends React.Component {
             event.preventDefault()
     }
 
-    signupWithGoogle = event => {
+    signUpWithGoogle = event => {
         this.props.firebase
             .doCreateUserWithGoogle()
+            .then((result) => {
+                if(result.additionalUserInfo.isNewUser){
+                    const profile = result.additionalUserInfo.profile
+                    const username = profile.name
+                    const firstName = profile.given_name
+                    const lastName = profile.family_name
+                    const email = profile.email
+                    return this.props.firebase
+                    .user(result.user.uid)
+                    .set({
+                        username,
+                        firstName,
+                        lastName,
+                        email,
+                    })
+                }
+            })
             .then(authUser => {
                 this.props.history.push(UrlStrings.HOME)
             })
@@ -56,7 +82,7 @@ class SignUpFormBase extends React.Component {
                 this.setState({ error })
             })
 
-            event.preventDefault()
+        event.preventDefault()
     }
 
     onChange = event => {
@@ -126,11 +152,9 @@ class SignUpFormBase extends React.Component {
                 placeholder="Confirm Password"
             />   
             <button disabled={isInvalid} type="submit" >Sign Up</button>
+            <button type="button" onClick={this.signUpWithGoogle}>Sign Up With Google</button>
             {error && <p>{error.message}</p>}
           </form>  
-          <div>
-              <button onClick={this.signupWithGoogle}>SignUp with Google</button>
-          </div>
         </div>
         )
     }

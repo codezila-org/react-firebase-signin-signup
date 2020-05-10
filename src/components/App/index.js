@@ -11,7 +11,7 @@ import SignInPage from '../SignIn'
 import PasswordForgetPage from '../PasswordForget'
 import HomePage from '../Home'
 import AccountPage from '../Account'
-//import AdminPage from '../Admin'
+import AdminPage from '../Admin'
 
 import {UrlStrings} from '../../constants/routes'
 
@@ -29,7 +29,7 @@ const App = () =>(
                 <Route path={UrlStrings.PASSWORD_FORGET} component={PasswordForgetPage} />
                 <Route path={UrlStrings.HOME} component={HomePage} />
                 <Route path={UrlStrings.ACCOUNT} component={AccountPage} />
-                {/* <Route path={UrlStrings.ADMIN} component={AdminPage} /> */}
+                <Route path={UrlStrings.ADMIN} component={AdminPage} />
 
             </div>
         </Router>

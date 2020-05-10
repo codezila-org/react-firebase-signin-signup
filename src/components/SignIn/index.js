@@ -5,14 +5,26 @@ import { compose } from 'recompose'
 import { withRouter } from 'react-router-dom'
 import { withFirebase } from '../Firebase'
 import { PasswordForgetLink } from '../PasswordForget'
+import { AuthUserContext } from '../Session'
+import SignOut from '../SignOut'
 
-const SignInPage = () => (
-    <div>
-        <h1>SignIn</h1>
-        <SignInForm />
-        <PasswordForgetLink />
-        <SignUpLink />
-    </div>
+const SignInPage = ({ authUser }) => (
+    <AuthUserContext.Consumer>
+        {authUser =>
+            !!authUser ?  
+            <div>
+                <p>Already Login</p>
+                <SignOut />
+            </div> 
+            :
+            <div>
+                <h1>SignIn</h1>
+                <SignInForm />
+                <PasswordForgetLink />
+                <SignUpLink />
+            </div>
+        }
+    </AuthUserContext.Consumer>
 )
 
 const INITIAL_STATE = {
